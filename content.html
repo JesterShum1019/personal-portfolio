@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Jester Shum — Projects</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0a0f1e;
+      --bg2: #0d1426;
+      --card: rgba(255,255,255,0.04);
+      --card-border: rgba(255,255,255,0.08);
+      --blue: #3b82f6;
+      --blue-light: #60a5fa;
+      --blue-bg: rgba(59,130,246,0.15);
+      --text: #ffffff;
+      --text-muted: #94a3b8;
+      --text-dim: #64748b;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    /* NAV */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      background: rgba(10,15,30,0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--card-border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 4vw;
+      height: 64px;
+    }
+
+    .nav-brand {
+      display: flex; align-items: center; gap: 0.75rem; text-decoration: none;
+    }
+
+    .nav-logo-box {
+      width: 36px; height: 36px;
+      background: var(--blue);
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.8rem; font-weight: 700; color: #fff; letter-spacing: -0.02em;
+    }
+
+    .nav-name {
+      font-size: 0.9rem; font-weight: 600; color: var(--text);
+      letter-spacing: 0.05em; text-transform: uppercase;
+    }
+
+    .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+    .nav-links a {
+      text-decoration: none; font-size: 0.85rem; font-weight: 500;
+      color: var(--text-muted); transition: color 0.2s; letter-spacing: 0.02em;
+    }
+    .nav-links a:hover { color: var(--text); }
+    .nav-links a.active { color: var(--blue); border-bottom: 2px solid var(--blue); padding-bottom: 2px; }
+
+    .nav-resume {
+      display: inline-flex; align-items: center; gap: 0.4rem;
+      background: transparent; border: 1px solid rgba(255,255,255,0.2);
+      color: var(--text); text-decoration: none; font-size: 0.8rem;
+      font-weight: 500; padding: 0.45rem 1.1rem; border-radius: 8px;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .nav-resume:hover { border-color: var(--blue); background: var(--blue-bg); }
+
+    /* PAGE HEADER */
+    .page-header {
+      padding: 100px 6vw 3rem;
+      border-bottom: 1px solid var(--card-border);
+    }
+
+    .breadcrumb {
+      font-size: 0.75rem; font-weight: 500; letter-spacing: 0.1em;
+      text-transform: uppercase; color: var(--text-dim); margin-bottom: 1rem;
+    }
+    .breadcrumb a { color: var(--text-dim); text-decoration: none; }
+    .breadcrumb a:hover { color: var(--blue); }
+    .breadcrumb span { color: var(--blue); }
+
+    .page-title {
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      font-weight: 800; color: var(--text); letter-spacing: -0.03em;
+      line-height: 1.1; margin-bottom: 0.75rem;
+    }
+
+    .page-title span { color: var(--blue); }
+
+    .page-sub {
+      font-size: 0.95rem; font-weight: 300;
+      color: var(--text-muted); max-width: 500px; line-height: 1.65;
+    }
+
+    /* FEATURED AI IMAGE */
+    .featured {
+      padding: 3rem 6vw;
+      border-bottom: 1px solid var(--card-border);
+      display: grid;
+      grid-template-columns: 1.1fr 1fr;
+      gap: 3rem;
+      align-items: center;
+    }
+
+    @media (max-width: 760px) { .featured { grid-template-columns: 1fr; } }
+
+    .featured-img-wrap {
+      position: relative;
+      border-radius: 16px;
+      overflow: hidden;
+      border: 1px solid var(--card-border);
+      aspect-ratio: 4/3;
+      background: var(--card);
+    }
+
+    .featured-img-wrap img {
+      width: 100%; height: 100%; object-fit: cover; display: block;
+      transition: transform 0.5s ease;
+    }
+    .featured-img-wrap:hover img { transform: scale(1.04); }
+
+    .ai-badge {
+      position: absolute; top: 1rem; left: 1rem;
+      background: rgba(59,130,246,0.85);
+      color: #fff; font-size: 0.65rem; font-weight: 600;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      padding: 0.3rem 0.75rem; border-radius: 100px;
+    }
+
+    /* Placeholder shown before image is uploaded */
+    .img-placeholder {
+      width: 100%; height: 100%;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center; gap: 0.75rem;
+      color: var(--text-dim); font-size: 0.82rem; text-align: center;
+      padding: 2rem;
+    }
+
+    .img-placeholder .icon { font-size: 2.5rem; }
+
+    .featured-info { display: flex; flex-direction: column; gap: 1.25rem; }
+
+    .tag-row { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+
+    .tag {
+      font-size: 0.68rem; font-weight: 600; letter-spacing: 0.08em;
+      text-transform: uppercase; padding: 0.28rem 0.75rem;
+      border: 1px solid var(--card-border); border-radius: 100px;
+      color: var(--text-muted); background: var(--card);
+    }
+
+    .tag.blue { border-color: rgba(59,130,246,0.4); color: var(--blue-light); background: var(--blue-bg); }
+
+    .featured-title {
+      font-size: clamp(1.3rem, 3vw, 2rem);
+      font-weight: 700; color: var(--text);
+      letter-spacing: -0.02em; line-height: 1.25;
+    }
+
+    .featured-body {
+      font-size: 0.9rem; font-weight: 300;
+      color: var(--text-muted); line-height: 1.75;
+    }
+
+    .featured-meta {
+      display: flex; flex-direction: column; gap: 0.6rem;
+      border-top: 1px solid var(--card-border); padding-top: 1rem;
+    }
+
+    .meta-row { display: flex; justify-content: space-between; font-size: 0.8rem; }
+    .meta-key { color: var(--text-dim); }
+    .meta-val { color: var(--text-muted); font-weight: 500; }
+
+    /* PROJECTS GRID */
+    .projects { padding: 3rem 6vw 5rem; }
+
+    .section-label {
+      font-size: 0.68rem; font-weight: 600; letter-spacing: 0.15em;
+      text-transform: uppercase; color: var(--text-dim);
+      margin-bottom: 1.5rem; padding-bottom: 1rem;
+      border-bottom: 1px solid var(--card-border);
+    }
+
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1px;
+      background: var(--card-border);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      overflow: hidden;
+    }
+
+    .project-card {
+      background: var(--bg);
+      padding: 1.75rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      transition: background 0.2s;
+      cursor: pointer;
+    }
+    .project-card:hover { background: var(--bg2); }
+
+    .project-icon { font-size: 1.5rem; }
+
+    .project-name {
+      font-size: 0.95rem; font-weight: 600; color: var(--text); line-height: 1.35;
+    }
+
+    .project-desc {
+      font-size: 0.8rem; color: var(--text-dim); line-height: 1.6; flex: 1;
+    }
+
+    .project-tags { display: flex; gap: 0.4rem; flex-wrap: wrap; margin-top: 0.25rem; }
+
+    .ptag {
+      font-size: 0.62rem; font-weight: 600; letter-spacing: 0.07em;
+      text-transform: uppercase; padding: 0.2rem 0.55rem;
+      border: 1px solid var(--card-border); border-radius: 100px;
+      color: var(--text-dim);
+    }
+
+    .project-arrow {
+      font-size: 0.8rem; color: var(--text-dim);
+      opacity: 0; transition: opacity 0.2s;
+      align-self: flex-end;
+    }
+    .project-card:hover .project-arrow { opacity: 1; color: var(--blue); }
+
+    /* BACK FOOTER */
+    .back-footer {
+      background: var(--bg2);
+      border-top: 1px solid var(--card-border);
+      padding: 2rem 6vw;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+
+    .back-link {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      font-size: 0.85rem; font-weight: 500; color: var(--text-muted);
+      text-decoration: none; transition: color 0.2s;
+    }
+    .back-link:hover { color: var(--blue); }
+
+    .footer-note { font-size: 0.8rem; color: var(--text-dim); }
+
+    @media (max-width: 768px) { .nav-links { display: none; } }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a href="index.html" class="nav-brand">
+      <div class="nav-logo-box">JS</div>
+      <span class="nav-name">Jester Shum</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="#">About</a></li>
+      <li><a href="#">Experience</a></li>
+      <li><a href="content.html" class="active">Projects</a></li>
+      <li><a href="#">Skills</a></li>
+      <li><a href="#">Contact</a></li>
+    </ul>
+    <a href="#" class="nav-resume">Download Resume ↓</a>
+  </nav>
+
+  <!-- PAGE HEADER -->
+  <header class="page-header">
+    <p class="breadcrumb"><a href="index.html">Home</a> / <span>Projects</span></p>
+    <h1 class="page-title">My <span>Work</span> &amp; Projects</h1>
+    <p class="page-sub">A selection of finance, data, and technology projects — from stock pitches to machine learning models.</p>
+  </header>
+
+  <!-- FEATURED: AI-GENERATED IMAGE -->
+  <section class="featured">
+    <div class="featured-img-wrap">
+      <!--
+        TO DO: Replace "ai-image.png" with your actual AI-generated image filename.
+        Upload your image to Replit alongside index.html and content.html.
+      -->
+      <img
+        src="ai-image.png"
+        alt="AI-generated image for featured project"
+        onerror="this.style.display='none'; document.getElementById('imgFallback').style.display='flex';"
+      />
+      <div class="img-placeholder" id="imgFallback" style="display:none;">
+        <span class="icon">🖼️</span>
+        <p>Upload your AI-generated<br/>image as <strong>ai-image.png</strong></p>
+      </div>
+      <span class="ai-badge">AI Generated</span>
+    </div>
+
+    <div class="featured-info">
+      <div class="tag-row">
+        <span class="tag blue">Featured</span>
+        <span class="tag">Equity Research</span>
+        <span class="tag">HK Markets</span>
+      </div>
+      <h2 class="featured-title">UBS Finance Challenge — Hong Kong Sector Analysis</h2>
+      <p class="featured-body">
+        A deep-dive into five HK sectors — Technology, Consumer, Auto &amp; Industrials, Healthcare, and Energy Transition — culminating in a pair trade pitch. Built the full investment thesis from fundamental screening through valuation.
+      </p>
+      <div class="featured-meta">
+        <div class="meta-row">
+          <span class="meta-key">Role</span>
+          <span class="meta-val">Equity Researcher</span>
+        </div>
+        <div class="meta-row">
+          <span class="meta-key">Scope</span>
+          <span class="meta-val">5 Sectors · Pair Trade Pitch</span>
+        </div>
+        <div class="meta-row">
+          <span class="meta-key">Market</span>
+          <span class="meta-val">Hong Kong (HKEX)</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MORE PROJECTS -->
+  <section class="projects">
+    <p class="section-label">More projects</p>
+    <div class="projects-grid">
+
+      <div class="project-card">
+        <span class="project-icon">📊</span>
+        <p class="project-name">How to Pick a Stock — UW Corporate Banking Club</p>
+        <p class="project-desc">Presentation deck covering financial ratios, 10-K navigation, and stock screening tools for club members.</p>
+        <div class="project-tags">
+          <span class="ptag">Finance</span>
+          <span class="ptag">Presentation</span>
+        </div>
+        <span class="project-arrow">→</span>
+      </div>
+
+      <div class="project-card">
+        <span class="project-icon">🐍</span>
+        <p class="project-name">Climate Change Regression Analysis</p>
+        <p class="project-desc">Python data science case study: regression modeling, correlation analysis, and train/test evaluation in Google Colab.</p>
+        <div class="project-tags">
+          <span class="ptag">Python</span>
+          <span class="ptag">Data Science</span>
+        </div>
+        <span class="project-arrow">→</span>
+      </div>
+
+      <div class="project-card">
+        <span class="project-icon">🤖</span>
+        <p class="project-name">Algorithmic Bias Reflection — Unmasking AI</p>
+        <p class="project-desc">Written analysis of Joy Buolamwini's work on AI defaults and the concept that "defaults are not neutral."</p>
+        <div class="project-tags">
+          <span class="ptag">AI Ethics</span>
+          <span class="ptag">Writing</span>
+        </div>
+        <span class="project-arrow">→</span>
+      </div>
+
+      <div class="project-card">
+        <span class="project-icon">⚙️</span>
+        <p class="project-name">NoteForge — AI Note Transformation App</p>
+        <p class="project-desc">React app using the Claude API to transform rough shorthand notes into polished, structured output.</p>
+        <div class="project-tags">
+          <span class="ptag">React</span>
+          <span class="ptag">Claude API</span>
+        </div>
+        <span class="project-arrow">→</span>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- BACK FOOTER -->
+  <div class="back-footer">
+    <a href="index.html" class="back-link">← Back to Home</a>
+    <p class="footer-note">© 2026 Jester Shum</p>
+  </div>
+
+</body>
+</html>
